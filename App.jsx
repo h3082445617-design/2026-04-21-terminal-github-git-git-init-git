@@ -384,13 +384,13 @@ function App() {
             <p className="mt-2 text-sm font-bold text-slate-500">所有选项都支持再次点击取消选中。</p>
           </div>
 
-          <div className="grid gap-8 lg:grid-cols-2">
+          <div className="grid gap-8">
             <div>
               <div className="mb-4 flex items-center gap-2 font-black">
                 <Wifi className="h-5 w-5 text-cyan-600" />
                 自建专线网络
               </div>
-              <div className="grid gap-4">
+              <div className="grid gap-4 lg:grid-cols-2">
                 <OptionCard active={network === "1_month"} icon={Rocket} onClick={() => setNetwork(network === "1_month" ? null : "1_month")} price={PRICES.network["1_month"]} title="尝鲜单月">
                   先体验完整环境，适合第一次尝试 AI 套餐的新手。
                 </OptionCard>
@@ -405,6 +405,28 @@ function App() {
                   长期使用更安心，绑定本站专属网络后享受更完整售后保障。
                 </OptionCard>
               </div>
+
+              <div
+                className={[
+                  "mt-5 rounded-xl border p-5 shadow-sm",
+                  network
+                    ? "border-emerald-200 bg-gradient-to-r from-emerald-50 to-amber-50 text-emerald-950"
+                    : "border-red-200 bg-red-50 text-red-950",
+                ].join(" ")}
+              >
+                <div className="flex gap-3">
+                  {network ? (
+                    <ShieldCheck className="mt-0.5 h-6 w-6 shrink-0 text-emerald-600" />
+                  ) : (
+                    <ShieldAlert className="mt-0.5 h-6 w-6 shrink-0 text-red-600" />
+                  )}
+                  <p className="text-sm font-bold leading-7">
+                    {network
+                      ? "🛡️ 已激活终身包赔：您已绑定本站专属网络，享受掉线指导、Plus 掉会员免费补全等 VIP 专属保障！"
+                      : "⚠️ 风险提示：未选择本站自建网络。因客户自有网络波动导致的封号、掉会员，本站不提供售后及退款。建议勾选上方网络获取保障。"}
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div>
@@ -412,7 +434,7 @@ function App() {
                 <Mail className="h-5 w-5 text-indigo-600" />
                 Gmail 与绑卡能力
               </div>
-              <div className="grid gap-4">
+              <div className="grid gap-4 lg:grid-cols-2">
                 <OptionCard active={gmail} icon={Mail} onClick={toggleGmail} price={PRICES.account.gmail} title="纯净原生 Gmail">
                   ￥20。干净的 Google 身份基底，可单独买，也可配合 GPT 或 Gemini 充值使用。
                 </OptionCard>
@@ -425,8 +447,8 @@ function App() {
 
           <div className="mb-8 mt-12">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-indigo-700">Step 02</p>
-            <h2 className="mt-2 text-3xl font-black">选择 AI 服务：GPT 可加购，Gemini 二选一</h2>
-            <p className="mt-2 text-sm font-bold text-slate-500">ChatGPT Plus 可以和 Gemini 同时选择；Gemini Pro 3个月会员与1年成品号互斥，重复点击可取消。</p>
+            <h2 className="mt-2 text-3xl font-black">选择 AI 服务：GPT Plus 和 Gemini Pro 可同时选</h2>
+            <p className="mt-2 text-sm font-bold text-slate-500">ChatGPT Plus 1个月与 Gemini Pro 3个月可以一起下单；只有 Gemini Pro 3个月和 Gemini 1年成品号二选一，重复点击可取消。</p>
           </div>
 
           <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
@@ -434,9 +456,9 @@ function App() {
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div>
                   <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-700">Recharge</p>
-                  <h3 className="mt-1 text-xl font-black text-slate-950">可充值会员区</h3>
+                  <h3 className="mt-1 text-xl font-black text-slate-950">GPT Plus + Gemini Pro 充值区</h3>
                 </div>
-                <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-cyan-800 shadow-sm">GPT 可叠加</span>
+                <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-cyan-800 shadow-sm">两项可同时选</span>
               </div>
               <div className="grid gap-4 md:grid-cols-2">
                 <OptionCard active={aiServices.includes("gpt_plus_1m")} icon={Bot} onClick={() => toggleRechargeService("gpt_plus_1m")} price={PRICES.ai_service.gpt_plus_1m} title="ChatGPT Plus 1个月">
@@ -468,28 +490,6 @@ function App() {
               >
                 ￥100。完整成品号，开箱即用；和 Gemini 3个月二选一，可同时加购 ChatGPT Plus。
               </OptionCard>
-            </div>
-          </div>
-
-          <div
-            className={[
-              "mt-6 rounded-xl border p-5 shadow-sm",
-              network
-                ? "border-emerald-200 bg-gradient-to-r from-emerald-50 to-amber-50 text-emerald-950"
-                : "border-red-200 bg-red-50 text-red-950",
-            ].join(" ")}
-          >
-            <div className="flex gap-3">
-              {network ? (
-                <ShieldCheck className="mt-0.5 h-6 w-6 shrink-0 text-emerald-600" />
-              ) : (
-                <ShieldAlert className="mt-0.5 h-6 w-6 shrink-0 text-red-600" />
-              )}
-              <p className="text-sm font-bold leading-7 sm:text-base">
-                {network
-                  ? "🛡️ 已激活终身包赔：您已绑定本站专属网络，享受掉线指导、Plus 掉会员免费补全等 VIP 专属保障！"
-                  : "⚠️ 风险提示：未选择本站自建网络。因客户自有网络波动导致的封号、掉会员，本站不提供售后及退款。建议勾选上方网络获取保障。"}
-              </p>
             </div>
           </div>
 
