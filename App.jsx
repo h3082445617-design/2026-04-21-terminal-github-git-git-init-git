@@ -57,6 +57,12 @@ const LABELS = {
 
 const WECHAT_ID = "你的微信号";
 const RECHARGE_SERVICES = ["gpt_plus_1m", "gemini_3m"];
+const BUNDLE_DISCOUNTS = {
+  dual_engine_finished: {
+    amount: 10,
+    name: "双引擎省心包立减",
+  },
+};
 
 function OptionCard({
   active,
@@ -189,6 +195,17 @@ function App() {
     [network, gmail, zeroCard, aiServices],
   );
 
+  const discount = useMemo(() => {
+    const hasDualEngineFinishedBundle =
+      network === "6_months" &&
+      aiServices.includes("gpt_plus_1m") &&
+      aiServices.includes("gemini_1y");
+
+    return hasDualEngineFinishedBundle ? BUNDLE_DISCOUNTS.dual_engine_finished.amount : 0;
+  }, [network, aiServices]);
+
+  const payableTotal = total - discount;
+
   const chooseFinishedAccount = () => {
     setAiServices((current) => {
       if (current.includes("gemini_1y")) {
@@ -242,7 +259,8 @@ function App() {
       return;
     }
 
-    const orderText = `老板你好，我是新手，我要买【${selectedItems.join(" + ")}】，显示总价${total}元，请问怎么微信付款？`;
+    const discountText = discount > 0 ? `，已触发组合优惠立减${discount}元` : "";
+    const orderText = `老板你好，我是新手，我要买【${selectedItems.join(" + ")}】，原价${total}元${discountText}，显示总价${payableTotal}元，请问怎么微信付款？`;
 
     try {
       await navigator.clipboard.writeText(orderText);
@@ -379,7 +397,7 @@ function App() {
           />
           <PresetCard
             title="双引擎省心包"
-            description={<><Strong>不想折腾账号</Strong>：半年网络 + GPT Plus 1个月 + Gemini 1年成品号，GPT 和 Gemini 同时开跑。</>}
+            description={<><Strong>不想折腾账号</Strong>：半年网络 + GPT Plus 1个月 + Gemini 1年成品号，命中组合立减 ￥10。</>}
             icon={Crown}
             onClick={() => applyPreset({ network: "6_months", gmail: false, zeroCard: false, aiServices: ["gpt_plus_1m", "gemini_1y"] })}
           />
@@ -568,8 +586,13 @@ function App() {
           <div>
             <p className="text-xs font-bold text-slate-500">已选 {selectedItems.length} 项</p>
             <p className="mt-1 text-lg font-black text-slate-950 sm:text-2xl">
-              总计：<span className="text-cyan-600">￥{total}</span>
+              总计：<span className="text-cyan-600">￥{payableTotal}</span>
             </p>
+            {discount > 0 && (
+              <p className="mt-1 text-xs font-black text-amber-600 sm:text-sm">
+                原价 ￥{total}，{BUNDLE_DISCOUNTS.dual_engine_finished.name} ￥{discount}
+              </p>
+            )}
           </div>
           <button
             type="button"
