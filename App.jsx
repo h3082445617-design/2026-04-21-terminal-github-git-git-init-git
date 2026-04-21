@@ -13,8 +13,10 @@ const {
   Globe2,
   ImagePlus,
   Mail,
+  MessageCircle,
   Network,
   PackageCheck,
+  QrCode,
   Rocket,
   ShieldAlert,
   ShieldCheck,
@@ -55,7 +57,9 @@ const LABELS = {
   },
 };
 
-const WECHAT_ID = "你的微信号";
+const WECHAT_NAME = "灿灿";
+const WECHAT_LOCATION = "四川 成都";
+const WECHAT_QR = "./assets/wechat-qr.jpg";
 const RECHARGE_SERVICES = ["gpt_plus_1m", "gemini_3m"];
 const BUNDLE_DISCOUNTS = {
   dual_engine_finished: {
@@ -63,6 +67,23 @@ const BUNDLE_DISCOUNTS = {
     name: "双引擎省心包立减",
   },
 };
+
+function Strong({ children, className = "text-slate-950" }) {
+  return <span className={`font-black ${className}`}>{children}</span>;
+}
+
+function SectionTitle({ eyebrow, icon: Icon, title, children }) {
+  return (
+    <div className="mb-6 flex items-end justify-between gap-4">
+      <div>
+        <p className="text-sm font-black uppercase tracking-[0.2em] text-cyan-700">{eyebrow}</p>
+        <h2 className="mt-2 text-3xl font-black text-slate-950">{title}</h2>
+        {children && <p className="mt-2 text-sm font-bold leading-6 text-slate-500">{children}</p>}
+      </div>
+      {Icon && <Icon className="hidden h-10 w-10 text-cyan-600 sm:block" />}
+    </div>
+  );
+}
 
 function OptionCard({
   active,
@@ -75,11 +96,10 @@ function OptionCard({
   onClick,
   price,
   title,
-  type = "button",
 }) {
   return (
     <button
-      type={type}
+      type="button"
       disabled={disabled}
       onClick={onClick}
       className={[
@@ -123,31 +143,9 @@ function OptionCard({
           <Check className="h-4 w-4" />
         </span>
       </div>
-      {active && (
-        <p className="mt-3 text-xs font-black text-cyan-700">
-          已选中，再点一次可取消
-        </p>
-      )}
+      {active && <p className="mt-3 text-xs font-black text-cyan-700">已选中，再点一次可取消</p>}
     </button>
   );
-}
-
-function LogicPill({ ok, children }) {
-  return (
-    <div
-      className={[
-        "flex items-start gap-3 rounded-xl border p-4 text-sm font-bold leading-6",
-        ok ? "border-emerald-200 bg-emerald-50 text-emerald-950" : "border-red-200 bg-red-50 text-red-950",
-      ].join(" ")}
-    >
-      {ok ? <Check className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" /> : <XCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-600" />}
-      <span>{children}</span>
-    </div>
-  );
-}
-
-function Strong({ children, className = "text-slate-950" }) {
-  return <span className={`font-black ${className}`}>{children}</span>;
 }
 
 function PresetCard({ description, icon: Icon, onClick, title }) {
@@ -163,6 +161,42 @@ function PresetCard({ description, icon: Icon, onClick, title }) {
       <h3 className="text-lg font-black text-slate-950">{title}</h3>
       <p className="mt-2 text-sm leading-6 text-slate-500">{description}</p>
     </button>
+  );
+}
+
+function ContactCard({ compact = false }) {
+  return (
+    <div
+      className={[
+        "rounded-[1.75rem] border border-cyan-100 bg-white shadow-2xl shadow-cyan-950/10",
+        compact ? "p-4" : "p-5 sm:p-6",
+      ].join(" ")}
+    >
+      <div className="flex items-start gap-4">
+        <div className="shrink-0 rounded-2xl bg-slate-950 p-2 shadow-lg">
+          <img
+            src={WECHAT_QR}
+            alt="客服微信二维码"
+            className={compact ? "h-32 w-24 rounded-xl bg-white object-contain" : "h-64 w-48 rounded-xl bg-white object-contain sm:h-72 sm:w-56"}
+          />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="inline-flex items-center gap-2 rounded-full bg-cyan-100 px-3 py-1 text-xs font-black text-cyan-800">
+            <QrCode className="h-4 w-4" />
+            扫码交付入口
+          </div>
+          <h3 className={compact ? "mt-3 text-lg font-black text-slate-950" : "mt-4 text-2xl font-black text-slate-950"}>
+            复制订单后，扫码加客服微信
+          </h3>
+          <p className="mt-2 text-sm font-bold leading-6 text-slate-500">
+            微信昵称：<Strong>{WECHAT_NAME}</Strong>，地区：{WECHAT_LOCATION}。添加后把复制好的订单直接粘贴发送，客服会确认付款与交付步骤。
+          </p>
+          <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-black leading-5 text-amber-900">
+            建议话术：先点底部“一键复制订单”，再扫码添加，聊天框里直接粘贴即可。
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -234,10 +268,7 @@ function App() {
 
   const toggleGmail = () => {
     if (hasFinishedAccount) return;
-    setGmail((current) => {
-      if (current) setZeroCard(false);
-      return !current;
-    });
+    setGmail((current) => !current);
   };
 
   const toggleZeroCard = () => {
@@ -276,73 +307,87 @@ function App() {
       document.body.removeChild(textarea);
     }
 
-    alert(`订单复制成功！请添加客服微信：${WECHAT_ID} 并在聊天框粘贴发送。`);
+    alert(`订单复制成功！请扫码添加客服微信【${WECHAT_NAME}】，并在聊天框粘贴发送。`);
+    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
   return (
-    <main className="min-h-screen bg-[#eef7ff] pb-32 text-slate-950">
+    <main className="min-h-screen bg-[#eef7ff] pb-36 text-slate-950">
       <section className="relative overflow-hidden bg-slate-950 text-white">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.35),transparent_32%),radial-gradient(circle_at_80%_20%,rgba(124,58,237,0.45),transparent_28%),linear-gradient(135deg,#06142f,#111827_58%,#312e81)]" />
         <div className="absolute -right-20 top-20 h-56 w-56 rounded-full bg-cyan-300/20 blur-3xl" />
         <div className="absolute -left-24 bottom-0 h-64 w-64 rounded-full bg-violet-500/25 blur-3xl" />
 
-        <div className="relative mx-auto max-w-6xl px-5 py-16 sm:py-24">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100 backdrop-blur">
-            <Sparkles className="h-4 w-4" />
-            新手友好 · 已有账号/没有账号都能快速判断
+        <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-16 sm:py-24 lg:grid-cols-[1fr_320px] lg:items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-cyan-100 backdrop-blur">
+              <Sparkles className="h-4 w-4" />
+              新手友好 · 已有账号/没有账号都能快速判断
+            </div>
+            <h1 className="mt-7 max-w-4xl text-4xl font-black tracking-tight sm:text-6xl">
+              一站式解锁全球顶尖 AI 生产力
+            </h1>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-cyan-50/85 sm:text-xl">
+              专为新手设计 | 已有账号优先充值 | 没账号选成品号 | 网络决定售后保障
+            </p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={() => document.getElementById("builder")?.scrollIntoView({ behavior: "smooth" })}
+                className="inline-flex items-center justify-center gap-3 rounded-xl bg-white px-6 py-4 text-base font-black text-slate-950 shadow-2xl shadow-cyan-950/40 transition duration-300 hover:scale-105 hover:bg-cyan-50"
+              >
+                开始定制我的 AI 方案
+                <ArrowRight className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+                className="inline-flex items-center justify-center gap-3 rounded-xl border border-white/20 bg-white/10 px-6 py-4 text-base font-black text-white backdrop-blur transition duration-300 hover:scale-105 hover:bg-white/15"
+              >
+                查看微信交付方式
+                <MessageCircle className="h-5 w-5" />
+              </button>
+            </div>
           </div>
-          <h1 className="mt-7 max-w-4xl text-4xl font-black tracking-tight sm:text-6xl">
-            一站式解锁全球顶尖 AI 生产力
-          </h1>
-          <p className="mt-5 max-w-2xl text-base leading-8 text-cyan-50/85 sm:text-xl">
-            专为新手设计 | 已有账号优先充值 | 没账号选成品号 | 网络决定售后保障
-          </p>
-          <button
-            type="button"
-            onClick={() => document.getElementById("builder")?.scrollIntoView({ behavior: "smooth" })}
-            className="mt-9 inline-flex items-center gap-3 rounded-xl bg-white px-6 py-4 text-base font-black text-slate-950 shadow-2xl shadow-cyan-950/40 transition duration-300 hover:scale-105 hover:bg-cyan-50"
-          >
-            开始定制我的 AI 方案
-            <ArrowRight className="h-5 w-5" />
-          </button>
+
+          <div className="hidden rounded-[2rem] border border-white/15 bg-white/10 p-4 backdrop-blur lg:block">
+            <img src={WECHAT_QR} alt="客服微信二维码" className="w-full rounded-3xl bg-white object-contain p-2" />
+            <p className="mt-4 text-center text-sm font-black text-cyan-50">
+              选好套餐后扫码添加客服
+            </p>
+          </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-12">
-        <div className="mb-6 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.2em] text-cyan-700">Easy Mode</p>
-            <h2 className="mt-2 text-3xl font-black text-slate-950">一分钟看懂怎么买</h2>
-          </div>
-          <PackageCheck className="hidden h-10 w-10 text-cyan-600 sm:block" />
-        </div>
+        <SectionTitle eyebrow="Easy Mode" icon={PackageCheck} title="一分钟看懂怎么买" />
         <div className="grid gap-4 md:grid-cols-3">
           <div className="rounded-xl border border-cyan-100 bg-white p-5 shadow-lg shadow-cyan-950/5">
             <div className="mb-3 inline-flex rounded-full bg-cyan-100 px-3 py-1 text-xs font-black text-cyan-800">01 基础保障</div>
             <h3 className="text-lg font-black text-slate-950">网络是售后保障开关</h3>
-            <p className="mt-2 text-sm font-bold leading-6 text-slate-500"><Strong>想要掉线指导、补会员售后</Strong>，先选本站网络；网络可以搭配所有套餐。</p>
+            <p className="mt-2 text-sm font-bold leading-6 text-slate-500">
+              <Strong>想要掉线指导、补会员售后</Strong>，先选本站网络；网络可以搭配所有套餐。
+            </p>
           </div>
           <div className="rounded-xl border border-indigo-100 bg-white p-5 shadow-lg shadow-indigo-950/5">
             <div className="mb-3 inline-flex rounded-full bg-indigo-100 px-3 py-1 text-xs font-black text-indigo-800">02 账号工具</div>
             <h3 className="text-lg font-black text-slate-950">先判断有没有账号</h3>
-            <p className="mt-2 text-sm font-bold leading-6 text-slate-500"><Strong>没有账号</Strong>看 Gmail；<Strong>已有账号但缺支付能力</Strong>看绑卡；成品号用户不用选这两项。</p>
+            <p className="mt-2 text-sm font-bold leading-6 text-slate-500">
+              <Strong>没有账号</Strong>看 Gmail；<Strong>已有账号但缺支付能力</Strong>看绑卡；成品号用户不用选这两项。
+            </p>
           </div>
           <div className="rounded-xl border border-amber-100 bg-white p-5 shadow-lg shadow-amber-950/5">
             <div className="mb-3 inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-black text-amber-800">03 AI 服务</div>
             <h3 className="text-lg font-black text-slate-950">已有账号充值，没账号成品号</h3>
-            <p className="mt-2 text-sm font-bold leading-6 text-slate-500"><Strong>GPT 可叠加</Strong>；<Strong>Gemini 3个月适合已有账号</Strong>；Gemini 1年成品号适合想开箱即用。</p>
+            <p className="mt-2 text-sm font-bold leading-6 text-slate-500">
+              <Strong>GPT 可叠加</Strong>；<Strong>Gemini 3个月适合已有账号</Strong>；Gemini 1年成品号适合想开箱即用。
+            </p>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-12">
-        <div className="mb-6 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.2em] text-cyan-700">Showcase</p>
-            <h2 className="mt-2 text-3xl font-black text-slate-950">你能立刻打开的 AI 场景</h2>
-          </div>
-          <BadgeCheck className="hidden h-10 w-10 text-cyan-600 sm:block" />
-        </div>
+        <SectionTitle eyebrow="Showcase" icon={BadgeCheck} title="你能立刻打开的 AI 场景" />
         <div className="flex snap-x gap-4 overflow-x-auto pb-3 sm:grid sm:grid-cols-3 sm:overflow-visible">
           {[
             {
@@ -376,12 +421,9 @@ function App() {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-8">
-        <div className="mb-6">
-          <p className="text-sm font-black uppercase tracking-[0.2em] text-cyan-700">Presets</p>
-          <h2 className="mt-2 text-3xl font-black">极速通道：先选懒人包，再微调</h2>
-          <p className="mt-2 text-sm font-bold text-slate-500">点一下自动带入套餐，下方仍然可以重复点击取消或改选。</p>
-        </div>
-
+        <SectionTitle eyebrow="Presets" title="极速通道：先选懒人包，再微调">
+          点一下自动带入套餐，下方仍然可以重复点击取消或改选。
+        </SectionTitle>
         <div className="grid gap-4 md:grid-cols-3">
           <PresetCard
             title="尝鲜体验包"
@@ -406,11 +448,9 @@ function App() {
 
       <section id="builder" className="mx-auto max-w-6xl px-5 py-8">
         <div className="rounded-[2rem] bg-white/65 p-4 shadow-2xl shadow-indigo-950/10 ring-1 ring-white backdrop-blur sm:p-8">
-          <div className="mb-8">
-            <p className="text-sm font-black uppercase tracking-[0.2em] text-indigo-700">Step 01</p>
-            <h2 className="mt-2 text-3xl font-black">打通基建：网络与账号能力</h2>
-            <p className="mt-2 text-sm font-bold text-slate-500">所有选项都支持再次点击取消选中。</p>
-          </div>
+          <SectionTitle eyebrow="Step 01" title="打通基建：网络与账号能力">
+            所有选项都支持再次点击取消选中。
+          </SectionTitle>
 
           <div className="grid gap-8">
             <div>
@@ -513,7 +553,9 @@ function App() {
           <div className="mb-8 mt-12">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-indigo-700">Step 02</p>
             <h2 className="mt-2 text-3xl font-black">选择 AI 服务：GPT Plus 和 Gemini Pro 可同时选</h2>
-            <p className="mt-2 text-sm font-bold text-slate-500">ChatGPT Plus 1个月与 Gemini Pro 3个月可以一起下单；只有 Gemini Pro 3个月和 Gemini 1年成品号二选一，重复点击可取消。</p>
+            <p className="mt-2 text-sm font-bold text-slate-500">
+              ChatGPT Plus 1个月与 Gemini Pro 3个月可以一起下单；只有 Gemini Pro 3个月和 Gemini 1年成品号二选一，重复点击可取消。
+            </p>
           </div>
 
           <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
@@ -575,13 +617,36 @@ function App() {
 
           {hasRechargeService && !gmail && (
             <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-bold leading-6 text-amber-950">
-              提醒：你选择了可充值会员。<Strong className="text-amber-950">如果客户已有账号，可以不用补 Gmail</Strong>；如果是完全新手，建议加上 Gmail 更省心。
+              提醒：你选择了可充值会员。<Strong className="text-amber-950">如果客户已有账号，可以不用补 Gmail</Strong>；如果是完全新手，建议加一个 Gmail 更省心。
             </div>
           )}
         </div>
       </section>
 
-      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-white/50 bg-white/80 px-4 py-4 shadow-2xl shadow-slate-950/20 backdrop-blur-xl">
+      <section id="contact" className="mx-auto max-w-6xl px-5 py-10">
+        <div className="grid gap-5 lg:grid-cols-[1fr_420px] lg:items-center">
+          <div className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-2xl shadow-slate-950/20 sm:p-8">
+            <div className="inline-flex items-center gap-2 rounded-full bg-cyan-400/15 px-4 py-2 text-sm font-black text-cyan-100">
+              <MessageCircle className="h-4 w-4" />
+              最后一步：复制订单并交付
+            </div>
+            <h2 className="mt-5 text-3xl font-black">订单选好后，直接扫码加微信</h2>
+            <p className="mt-4 max-w-2xl text-sm font-bold leading-7 text-cyan-50/80">
+              这个位置放在选购区之后，用户刚看完总价就能立刻添加客服。移动端也会先看到清晰指引，再看到二维码，不会挡住套餐选择。
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {["1. 点底部复制订单", "2. 扫二维码加好友", "3. 粘贴订单确认付款"].map((item) => (
+                <div key={item} className="rounded-xl border border-white/10 bg-white/10 p-4 text-sm font-black text-white">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+          <ContactCard />
+        </div>
+      </section>
+
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-white/50 bg-white/85 px-4 py-4 shadow-2xl shadow-slate-950/20 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
           <div>
             <p className="text-xs font-bold text-slate-500">已选 {selectedItems.length} 项</p>
