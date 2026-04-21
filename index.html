@@ -3,72 +3,136 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="AI productivity package shopping guide." />
-    <title>AI Productivity Package</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: [
-                "ui-sans-serif",
-                "system-ui",
-                "BlinkMacSystemFont",
-                "Segoe UI",
-                "sans-serif",
-              ],
-            },
-          },
-        },
-      };
-    </script>
-    <style>
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        background: #f6fbf8;
-        color: #0f172a;
-        font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", ui-sans-serif, system-ui, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      }
-
-      .cn-heading {
-        word-break: keep-all;
-        overflow-wrap: normal;
-        text-wrap: balance;
-        line-break: loose;
-      }
-
-      .cn-copy {
-        text-wrap: pretty;
-        line-break: loose;
-      }
-
-      @media (max-width: 640px) {
-        .cn-heading {
-          word-break: normal;
-          overflow-wrap: break-word;
-        }
-      }
-    </style>
+    <meta
+      name="description"
+      content="AI 生产力套餐选购页，纯静态资源版本，无需外部 CDN。"
+    />
+    <title>AI 生产力套餐</title>
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div id="root">
-      <div
-        style="min-height: 100vh; display: grid; place-items: center; font-family: system-ui; color: #0f172a;"
-      >
-        Loading...
+    <main class="page">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">新手友好 · 纯静态免外链版</p>
+          <h1>一站式解锁全球 AI 生产力</h1>
+          <p class="hero-text">
+            这个版本去掉了国外 CDN 依赖，适合没有梯子的用户直接打开。选好套餐后可以一键复制下单话术，再扫码联系微信客服。
+          </p>
+          <div class="hero-tags">
+            <span>专为新手设计</span>
+            <span>已有账号可直接充值</span>
+            <span>没有账号可选成品号</span>
+            <span>手机端也能顺畅打开</span>
+          </div>
+          <div class="hero-actions">
+            <a class="button primary" href="#builder">开始选套餐</a>
+            <a class="button secondary" href="#contact">查看微信交付方式</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <img src="./assets/wechat-qr.jpg" alt="客服微信二维码" />
+          <p>选好套餐后扫码添加客服</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Presets</p>
+          <h2>按学习 / 科研强度快速选套餐</h2>
+          <p>从低预算体验，到课程作业，再到论文冲刺，都可以先套用，再继续微调。</p>
+        </div>
+        <div class="preset-grid" id="preset-grid"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Easy Mode</p>
+          <h2>一分钟看懂怎么买</h2>
+          <p>建议顺序：先选网络，再判断是否需要 Gmail / 绑卡，最后决定充值还是直接买成品号。</p>
+        </div>
+        <div class="guide-grid">
+          <article class="guide-card">
+            <h3>01 基础保障</h3>
+            <p>网络是售后保障开关。想要掉线指导、补会员售后，建议先选本站网络。</p>
+          </article>
+          <article class="guide-card">
+            <h3>02 账号工具</h3>
+            <p>没有 Google 账号就补 Gmail；已有账号但缺支付能力就补绑卡服务。</p>
+          </article>
+          <article class="guide-card">
+            <h3>03 AI 服务</h3>
+            <p>已有账号优先选充值；想开箱即用就直接选 Gemini 一年成品号。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="builder" class="section builder">
+        <div class="section-heading">
+          <p class="eyebrow">Step 01</p>
+          <h2>打通基建：网络与账号能力</h2>
+          <p>所有选项都支持再次点击取消，不用担心选错。</p>
+        </div>
+
+        <div class="panel">
+          <div class="subheading">网络服务</div>
+          <div class="option-grid" id="network-options"></div>
+          <div class="status-box" id="network-status"></div>
+        </div>
+
+        <div class="panel">
+          <div class="subheading">Gmail 与绑卡能力</div>
+          <div class="option-grid" id="account-options"></div>
+          <div class="tip-box" id="account-status"></div>
+        </div>
+
+        <div class="section-heading compact">
+          <p class="eyebrow">Step 02</p>
+          <h2>选择 AI 服务</h2>
+          <p>ChatGPT Plus 和 Gemini 可同时选；Gemini 3 个月与 Gemini 1 年成品号二选一。</p>
+        </div>
+
+        <div class="service-layout">
+          <div class="panel">
+            <div class="subheading">充值区</div>
+            <div class="option-grid" id="recharge-options"></div>
+          </div>
+          <div class="panel featured">
+            <div class="subheading">成品号区</div>
+            <div class="option-grid" id="finished-options"></div>
+          </div>
+        </div>
+
+        <div class="tip-box" id="recharge-tip"></div>
+      </section>
+
+      <section id="contact" class="section contact-layout">
+        <div class="contact-copy">
+          <p class="eyebrow light">最后一步</p>
+          <h2>复制订单并扫码联系微信</h2>
+          <p>
+            页面会自动汇总你选择的套餐、原价、优惠和最终总价。复制后发给客服即可确认付款方式和交付时间。
+          </p>
+        </div>
+        <div class="contact-card">
+          <img src="./assets/wechat-qr.jpg" alt="客服微信二维码" />
+          <h3>复制订单后扫码添加</h3>
+          <p>微信昵称：灿灿，地区：四川 成都。添加后把订单粘贴发送给客服即可。</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="checkout-bar">
+      <div>
+        <p class="count" id="selected-count">已选 0 项</p>
+        <p class="total">
+          总计：<span id="payable-total">¥0</span>
+        </p>
+        <p class="discount" id="discount-text"></p>
       </div>
+      <button class="button primary" id="copy-order" type="button">一键复制订单</button>
     </div>
-    <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
-    <script>
-      window.react = window.React;
-    </script>
-    <script src="https://unpkg.com/lucide-react@0.468.0/dist/umd/lucide-react.js"></script>
-    <script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
-    <script type="text/babel" src="./App.jsx?v=20260421-fresh-layout-2"></script>
+
+    <script src="./app.js"></script>
   </body>
 </html>

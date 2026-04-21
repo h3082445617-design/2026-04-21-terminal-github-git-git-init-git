@@ -1,18 +1,18 @@
-# AI 生产力套餐选购引导页
+# Static fallback page
 
-这是一个纯前端 React SPA，用于展示和选购 AI 生产力套餐。
+这个版本去掉了国外 CDN 依赖，改成纯 `HTML + CSS + JS`，避免用户在没有梯子的情况下卡在 `Loading...`。
 
-线上托管地址：
+原页面的问题主要来自这些外链资源：
 
-https://h3082445617-design.github.io/2026-04-21-terminal-github-git-git-init-git/
+- `cdn.tailwindcss.com`
+- `unpkg.com/react`
+- `unpkg.com/react-dom`
+- `unpkg.com/lucide-react`
+- `unpkg.com/@babel/standalone`
 
-## 技术栈
+现在页面只依赖仓库内文件：
 
-- React 18
-- Tailwind CSS
-- lucide-react
-- GitHub Pages 静态托管
-
-## 本地预览
-
-直接用浏览器打开 `index.html` 即可。
+- `index.html`
+- `styles.css`
+- `app.js`
+- `assets/wechat-qr.jpg`
