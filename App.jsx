@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from "react";
-import { createRoot } from "react-dom/client";
-import {
+const { useMemo, useState } = React;
+const { createRoot } = ReactDOM;
+const {
   ArrowRight,
   BadgeCheck,
   Bot,
@@ -18,7 +18,7 @@ import {
   ShieldCheck,
   Sparkles,
   Wifi,
-} from "lucide-react";
+} = LucideReact;
 
 const PRICES = {
   network: {
