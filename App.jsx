@@ -186,22 +186,28 @@ function App() {
   );
 
   const chooseFinishedAccount = () => {
-    setAiServices((current) => (current.includes("gemini_1y") ? [] : ["gemini_1y"]));
-    setGmail(false);
-    setZeroCard(false);
+    setAiServices((current) =>
+      current.includes("gemini_1y")
+        ? current.filter((item) => item !== "gemini_1y")
+        : [...current.filter((item) => item !== "gemini_3m"), "gemini_1y"],
+    );
   };
 
   const toggleRechargeService = (service) => {
     setAiServices((current) => {
-      const withoutFinished = current.filter((item) => item !== "gemini_1y");
-      return withoutFinished.includes(service)
-        ? withoutFinished.filter((item) => item !== service)
-        : [...withoutFinished, service];
+      if (current.includes(service)) {
+        return current.filter((item) => item !== service);
+      }
+
+      if (service === "gemini_3m") {
+        return [...current.filter((item) => item !== "gemini_1y"), service];
+      }
+
+      return [...current, service];
     });
   };
 
   const toggleGmail = () => {
-    if (hasFinishedAccount) return;
     setGmail((current) => {
       if (current) setZeroCard(false);
       return !current;
@@ -209,7 +215,6 @@ function App() {
   };
 
   const toggleZeroCard = () => {
-    if (hasFinishedAccount) return;
     setZeroCard((current) => !current);
   };
 
@@ -262,7 +267,7 @@ function App() {
             一站式解锁全球顶尖 AI 生产力
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-8 text-cyan-50/85 sm:text-xl">
-            专为新手设计 | 充值和成品号自动分开 | 节点全包售后 | 不怕买错
+            专为新手设计 | GPT 可叠加 | Gemini 二选一 | 节点全包售后
           </p>
           <button
             type="button"
@@ -296,8 +301,8 @@ function App() {
           </div>
           <div className="rounded-xl border border-amber-100 bg-white p-5 shadow-lg shadow-amber-950/5">
             <div className="mb-3 inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-black text-amber-800">03 AI 服务</div>
-            <h3 className="text-lg font-black text-slate-950">充值和成品号二选一逻辑</h3>
-            <p className="mt-2 text-sm font-bold leading-6 text-slate-500">充值类可叠加；Gemini 1年成品号 ￥100 是独立账号，选它会清空充值类。</p>
+            <h3 className="text-lg font-black text-slate-950">GPT 可加购，Gemini 二选一</h3>
+            <p className="mt-2 text-sm font-bold leading-6 text-slate-500">ChatGPT Plus 可和任意 Gemini 方案同时选；Gemini 只能在3个月会员和1年成品号里二选一。</p>
           </div>
         </div>
       </section>
@@ -342,6 +347,35 @@ function App() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-6xl px-5 py-8">
+        <div className="mb-6">
+          <p className="text-sm font-black uppercase tracking-[0.2em] text-cyan-700">Presets</p>
+          <h2 className="mt-2 text-3xl font-black">极速通道：先选懒人包，再微调</h2>
+          <p className="mt-2 text-sm font-bold text-slate-500">点一下自动带入套餐，下方仍然可以重复点击取消或改选。</p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          <PresetCard
+            title="尝鲜体验包"
+            description="1个月网络 + Gmail + GPT Plus 1个月，适合先低成本体验。"
+            icon={Rocket}
+            onClick={() => applyPreset({ network: "1_month", gmail: true, zeroCard: false, aiServices: ["gpt_plus_1m"] })}
+          />
+          <PresetCard
+            title="Gemini 进阶包"
+            description="半年网络 + 绑卡服务 + Gemini Pro 3个月，适合已有账号续会员。"
+            icon={Network}
+            onClick={() => applyPreset({ network: "6_months", gmail: false, zeroCard: true, aiServices: ["gemini_3m"] })}
+          />
+          <PresetCard
+            title="双引擎省心包"
+            description="半年网络 + GPT Plus 1个月 + Gemini 1年成品号，GPT 和 Gemini 同时开跑。"
+            icon={Crown}
+            onClick={() => applyPreset({ network: "6_months", gmail: false, zeroCard: false, aiServices: ["gpt_plus_1m", "gemini_1y"] })}
+          />
+        </div>
+      </section>
+
       <section id="builder" className="mx-auto max-w-6xl px-5 py-8">
         <div className="rounded-[2rem] bg-white/65 p-4 shadow-2xl shadow-indigo-950/10 ring-1 ring-white backdrop-blur sm:p-8">
           <div className="mb-8">
@@ -379,11 +413,11 @@ function App() {
                 Gmail 与绑卡能力
               </div>
               <div className="grid gap-4">
-                <OptionCard disabled={hasFinishedAccount} active={gmail} icon={Mail} onClick={toggleGmail} price={PRICES.account.gmail} title="纯净原生 Gmail">
-                  充值类服务的身份基底。若选择成品号，这项会自动关闭。
+                <OptionCard active={gmail} icon={Mail} onClick={toggleGmail} price={PRICES.account.gmail} title="纯净原生 Gmail">
+                  ￥20。干净的 Google 身份基底，可单独买，也可配合 GPT 或 Gemini 充值使用。
                 </OptionCard>
-                <OptionCard disabled={hasFinishedAccount} active={zeroCard} icon={CreditCard} onClick={toggleZeroCard} price={PRICES.account.zero_card} title="零美元卡绑定服务">
-                  绑卡是独立增值服务，可以单独选择，也可以和充值类会员一起买。
+                <OptionCard active={zeroCard} icon={CreditCard} onClick={toggleZeroCard} price={PRICES.account.zero_card} title="零美元卡绑定服务">
+                  ￥20。绑卡是独立增值服务，可以单独选择，也可以和会员服务一起买。
                 </OptionCard>
               </div>
             </div>
@@ -391,7 +425,8 @@ function App() {
 
           <div className="mb-8 mt-12">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-indigo-700">Step 02</p>
-            <h2 className="mt-2 text-3xl font-black">选择 AI 服务：想续会员选充值，想省事选成品号</h2>
+            <h2 className="mt-2 text-3xl font-black">选择 AI 服务：GPT 可加购，Gemini 二选一</h2>
+            <p className="mt-2 text-sm font-bold text-slate-500">ChatGPT Plus 可以和 Gemini 同时选择；Gemini Pro 3个月会员与1年成品号互斥，重复点击可取消。</p>
           </div>
 
           <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
@@ -401,14 +436,14 @@ function App() {
                   <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-700">Recharge</p>
                   <h3 className="mt-1 text-xl font-black text-slate-950">可充值会员区</h3>
                 </div>
-                <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-cyan-800 shadow-sm">可一起选</span>
+                <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-cyan-800 shadow-sm">GPT 可叠加</span>
               </div>
               <div className="grid gap-4 md:grid-cols-2">
                 <OptionCard active={aiServices.includes("gpt_plus_1m")} icon={Bot} onClick={() => toggleRechargeService("gpt_plus_1m")} price={PRICES.ai_service.gpt_plus_1m} title="ChatGPT Plus 1个月">
-                  ￥50。给现有账号续会员，可和 Gemini Pro 3个月一起下单。
+                  ￥50。给现有账号续会员，可和 Gemini 3个月或1年成品号同时下单。
                 </OptionCard>
                 <OptionCard active={aiServices.includes("gemini_3m")} icon={Gem} onClick={() => toggleRechargeService("gemini_3m")} price={PRICES.ai_service.gemini_3m} title="Gemini Pro 3个月">
-                  ￥50。可充值会员，适合已有账号或需要短期体验的用户。
+                  ￥50。可充值会员，适合已有账号或短期体验；和 Gemini 1年成品号二选一。
                 </OptionCard>
               </div>
             </div>
@@ -431,7 +466,7 @@ function App() {
                 price={PRICES.ai_service.gemini_1y}
                 title="Gemini Pro 1年成品号"
               >
-                ￥100。完整成品号，不用再配 Gmail、绑卡或充值会员。选它会自动清空左侧充值类。
+                ￥100。完整成品号，开箱即用；和 Gemini 3个月二选一，可同时加购 ChatGPT Plus。
               </OptionCard>
             </div>
           </div>
@@ -458,39 +493,11 @@ function App() {
             </div>
           </div>
 
-          {hasRechargeService && !gmail && !hasFinishedAccount && (
+          {hasRechargeService && !gmail && (
             <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-bold leading-6 text-amber-950">
-              提醒：你选择了充值类会员，但还没选择 Gmail 身份基底。建议补上 Gmail，或直接改选 Gemini 1年成品号。
+              提醒：你选择了可充值会员，但还没选择 Gmail 身份基底。如果客户已有账号可以不用补；如果是新手，建议加上 Gmail 更省心。
             </div>
           )}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-5 py-12">
-        <div className="mb-6">
-          <p className="text-sm font-black uppercase tracking-[0.2em] text-cyan-700">Presets</p>
-          <h2 className="mt-2 text-3xl font-black">极速通道：按逻辑自动配好</h2>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-3">
-          <PresetCard
-            title="尝鲜体验包"
-            description="1个月网络 + Gmail + GPT Plus 1个月充值，适合先低成本体验。"
-            icon={Rocket}
-            onClick={() => applyPreset({ network: "1_month", gmail: true, zeroCard: false, aiServices: ["gpt_plus_1m"] })}
-          />
-          <PresetCard
-            title="长效进阶包"
-            description="半年网络 + 零美元卡绑定 + Gemini 3个月充值，适合稳定进阶。"
-            icon={Network}
-            onClick={() => applyPreset({ network: "6_months", gmail: false, zeroCard: true, aiServices: ["gemini_3m"] })}
-          />
-          <PresetCard
-            title="满血全自动包"
-            description="半年网络 + Gemini 1年成品号，不叠加充值，不折腾账号。"
-            icon={Crown}
-            onClick={() => applyPreset({ network: "6_months", gmail: false, zeroCard: false, aiServices: ["gemini_1y"] })}
-          />
         </div>
       </section>
 
