@@ -113,6 +113,8 @@ const PRESETS = [
     title: "入门尝鲜包",
     icon: Rocket,
     color: "cyan",
+    tag: "预算最低",
+    price: 90,
     preset: { network: "1_month", gmail: true, zeroCard: false, aiServices: ["gpt_plus_1m"] },
     audience: "刚接触 AI 的学生、课程作业较多但预算有限的新手。",
     ability: "用 GPT Plus 辅助改论文段落、润色邮件、整理课堂笔记、解释实验原理和代码报错。",
@@ -122,6 +124,8 @@ const PRESETS = [
     title: "科研进阶包",
     icon: Network,
     color: "sky",
+    tag: "已有账号优先",
+    price: 130,
     preset: { network: "6_months", gmail: false, zeroCard: true, aiServices: ["gemini_3m"] },
     audience: "已有 Google/Gemini 账号的学生、研究生、生环方向老师或课题组成员。",
     ability: "用 Gemini Pro 做长文献梳理、实验方案拆解、英文摘要润色、图表说明和组会汇报提纲。",
@@ -131,11 +135,20 @@ const PRESETS = [
     title: "论文冲刺省心包",
     icon: Crown,
     color: "amber",
+    tag: "最省心",
+    price: 200,
+    originalPrice: 210,
     preset: { network: "6_months", gmail: false, zeroCard: false, aiServices: ["gpt_plus_1m", "gemini_1y"] },
     audience: "马上要写结业论文、毕业论文、开题/结题汇报，或者不想折腾账号配置的人。",
     ability: "GPT 负责快速改写、润色和答辩问答；Gemini 年号负责长文献、实验背景、数据解读和长期科研资料整理。",
     scene: "时间紧、任务重、想开箱即用；命中组合立减 ￥10。",
   },
+];
+
+const MOBILE_TRUST_POINTS = [
+  "先选懒人包，再微调细节",
+  "所有选项都支持重复点击取消",
+  "选网络才享受售后保障",
 ];
 
 function Strong({ children, className = "text-slate-950" }) {
@@ -244,10 +257,19 @@ function PresetCard({ item, onClick }) {
       onClick={onClick}
       className="group flex h-full flex-col rounded-[1.75rem] border border-white bg-white/95 p-5 text-left shadow-xl shadow-slate-200/60 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-teal-100/70"
     >
-      <div className={`mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${colorClass}`}>
-        <Icon className="h-7 w-7" />
+      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${colorClass}`}>
+          <Icon className="h-7 w-7" />
+        </div>
+        <div className={`self-start rounded-full bg-gradient-to-br ${colorClass} px-3 py-1 text-xs font-black`}>
+          {item.tag}
+        </div>
       </div>
       <h3 className="cn-heading text-2xl font-black leading-tight text-slate-900">{item.title}</h3>
+      <div className="mt-4 flex items-end gap-2">
+        <span className="text-3xl font-black text-slate-900">￥{item.price}</span>
+        {item.originalPrice && <span className="pb-1 text-sm font-black text-slate-400 line-through">￥{item.originalPrice}</span>}
+      </div>
       <div className="mt-5 space-y-4 text-sm font-semibold leading-7 text-slate-500">
         <p><Strong>适合人群：</Strong>{item.audience}</p>
         <p><Strong>能做什么：</Strong>{item.ability}</p>
@@ -255,6 +277,10 @@ function PresetCard({ item, onClick }) {
       <p className={`mt-5 rounded-2xl bg-gradient-to-br ${colorClass} p-4 text-sm font-black leading-6`}>
         推荐场景：{item.scene}
       </p>
+      <div className="mt-5 inline-flex items-center gap-2 text-sm font-black text-teal-700">
+        点一下直接套用这套
+        <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+      </div>
     </button>
   );
 }
@@ -444,6 +470,17 @@ function App() {
                 <MessageCircle className="h-5 w-5 text-teal-600" />
               </button>
             </div>
+
+            <div className="mt-6 grid gap-3 sm:hidden">
+              {MOBILE_TRUST_POINTS.map((item) => (
+                <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/80 bg-white/70 px-4 py-3 shadow-sm shadow-teal-100/60 backdrop-blur">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-teal-500 text-white">
+                    <Check className="h-4 w-4" />
+                  </span>
+                  <p className="text-sm font-black text-slate-700">{item}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="hidden rounded-[2rem] border border-white bg-white/75 p-4 shadow-2xl shadow-teal-100/70 backdrop-blur lg:block">
@@ -455,8 +492,21 @@ function App() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-6xl px-5 py-10">
+        <SectionTitle eyebrow="Presets" icon={Crown} title="按学习/科研强度选套餐">
+          从日常体验、课程作业到论文冲刺，按自己的使用强度直接选；点一下自动带入，下方还能继续微调。
+        </SectionTitle>
+        <div className="grid gap-5 md:grid-cols-3">
+          {PRESETS.map((item) => (
+            <PresetCard key={item.title} item={item} onClick={() => applyPreset(item.preset)} />
+          ))}
+        </div>
+      </section>
+
       <section className="mx-auto max-w-6xl px-5 py-14">
-        <SectionTitle eyebrow="Easy Mode" icon={PackageCheck} title="一分钟看懂怎么买" />
+        <SectionTitle eyebrow="Easy Mode" icon={PackageCheck} title="一分钟看懂怎么买">
+          手机用户建议直接按下面顺序走：先看懒人包，再补账号能力，最后决定是充值还是直接拿成品号。
+        </SectionTitle>
         <div className="grid gap-4 md:grid-cols-3">
           {GUIDE_CARDS.map((card) => {
             const CardIcon = card.icon || Sparkles;
@@ -476,8 +526,8 @@ function App() {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-10">
-        <SectionTitle eyebrow="Showcase" icon={BadgeCheck} title="你能立刻打开的 AI 场景">
-          内容更贴近学生、生环老师和课题组的真实使用：论文、实验、文献、组会都能用。
+        <SectionTitle eyebrow="Showcase" icon={BadgeCheck} title="买完后你最常用的三个场景">
+          这部分不是炫技，是最常见的真实用途。学生、研究生和生环方向老师基本都能直接对上号。
         </SectionTitle>
         <div className="flex snap-x gap-4 overflow-x-auto pb-3 sm:grid sm:grid-cols-3 sm:overflow-visible">
           {SHOWCASES.map((item) => {
@@ -496,17 +546,6 @@ function App() {
               </article>
             );
           })}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-5 py-10">
-        <SectionTitle eyebrow="Presets" icon={Crown} title="按学习/科研强度选套餐">
-          从日常体验、课程作业到论文冲刺，按自己的使用强度直接选；点一下自动带入，下方还能继续微调。
-        </SectionTitle>
-        <div className="grid gap-5 md:grid-cols-3">
-          {PRESETS.map((item) => (
-            <PresetCard key={item.title} item={item} onClick={() => applyPreset(item.preset)} />
-          ))}
         </div>
       </section>
 
@@ -709,11 +748,11 @@ function App() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 sm:gap-3">
           <div className="min-w-0">
             <p className="text-xs font-bold text-slate-500">已选 {selectedItems.length} 项</p>
-            <p className="mt-1 text-lg font-black text-slate-900 sm:text-2xl">
+            <p className="mt-1 text-base font-black text-slate-900 sm:text-2xl">
               总计：<span className="text-teal-600">￥{payableTotal}</span>
             </p>
             {discount > 0 && (
-              <p className="mt-1 text-xs font-black text-amber-600 sm:text-sm">
+              <p className="mt-1 text-[11px] font-black text-amber-600 sm:text-sm">
                 原价 ￥{total}，{BUNDLE_DISCOUNTS.dual_engine_finished.name} ￥{discount}
               </p>
             )}
@@ -721,10 +760,10 @@ function App() {
           <button
             type="button"
             onClick={copyOrder}
-            className="inline-flex shrink-0 items-center gap-2 rounded-2xl bg-teal-500 px-4 py-3 text-sm font-black text-white shadow-xl shadow-teal-200 transition duration-300 hover:-translate-y-0.5 hover:bg-teal-600 sm:px-6 sm:text-base"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-[1.15rem] bg-teal-500 px-3 py-3 text-xs font-black text-white shadow-xl shadow-teal-200 transition duration-300 hover:-translate-y-0.5 hover:bg-teal-600 sm:gap-2 sm:rounded-2xl sm:px-6 sm:text-base"
           >
-            <ClipboardCheck className="h-5 w-5" />
-            <span className="sm:hidden">复制订单</span>
+            <ClipboardCheck className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="sm:hidden">复制下单</span>
             <span className="hidden sm:inline">一键复制订单并联系客服</span>
           </button>
         </div>
