@@ -29,7 +29,7 @@ const PRICES = {
     "6_months": 60,
   },
   account: {
-    gmail: 15,
+    gmail: 20,
     zero_card: 20,
   },
   ai_service: {
@@ -206,7 +206,6 @@ function App() {
   const toggleZeroCard = () => {
     if (hasFinishedAccount) return;
     setZeroCard((current) => !current);
-    setGmail(true);
   };
 
   const applyPreset = (preset) => {
@@ -282,7 +281,7 @@ function App() {
         <div className="grid gap-4 md:grid-cols-2">
           <LogicPill ok>网络是基础保障，可以和所有套餐一起买，选了网络才显示 VIP 售后保障。</LogicPill>
           <LogicPill ok>GPT Plus 1个月充值和 Gemini 3个月可充值会员可以一起买，属于“充值类服务”。</LogicPill>
-          <LogicPill ok>零美元卡绑定服务只能搭配 Gmail 和充值类服务；点击绑卡会自动补上 Gmail。</LogicPill>
+          <LogicPill ok>原生 Gmail 和零美元卡绑定是两项独立业务，可以按需单独选择，也可以和充值类服务一起买。</LogicPill>
           <LogicPill ok={false}>Gemini 1年成品号是独立成品号，不和 Gmail、绑卡、GPT 充值、Gemini 3个月充值叠加。</LogicPill>
         </div>
       </section>
@@ -367,7 +366,7 @@ function App() {
                   充值类服务的身份基底。若选择成品号，这项会自动关闭。
                 </OptionCard>
                 <OptionCard disabled={hasFinishedAccount} active={zeroCard} icon={CreditCard} onClick={toggleZeroCard} price={PRICES.account.zero_card} title="零美元卡绑定服务">
-                  绑卡是账号增值服务，只能搭配 Gmail 和充值类会员；点击会自动补上 Gmail。
+                  绑卡是独立增值服务，可以单独选择，也可以和充值类会员一起买。
                 </OptionCard>
               </div>
             </div>
@@ -444,9 +443,9 @@ function App() {
           />
           <PresetCard
             title="长效进阶包"
-            description="半年网络 + Gmail + 绑卡 + Gemini 3个月充值，适合稳定进阶。"
+            description="半年网络 + 零美元卡绑定 + Gemini 3个月充值，适合稳定进阶。"
             icon={Network}
-            onClick={() => applyPreset({ network: "6_months", gmail: true, zeroCard: true, aiServices: ["gemini_3m"] })}
+            onClick={() => applyPreset({ network: "6_months", gmail: false, zeroCard: true, aiServices: ["gemini_3m"] })}
           />
           <PresetCard
             title="满血全自动包"
