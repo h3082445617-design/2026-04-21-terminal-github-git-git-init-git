@@ -23,6 +23,36 @@
         },
       };
     </script>
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: #f6fbf8;
+        color: #0f172a;
+        font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", ui-sans-serif, system-ui, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .cn-heading {
+        word-break: keep-all;
+        overflow-wrap: normal;
+        text-wrap: balance;
+        line-break: loose;
+      }
+
+      .cn-copy {
+        text-wrap: pretty;
+        line-break: loose;
+      }
+
+      @media (max-width: 640px) {
+        .cn-heading {
+          word-break: normal;
+          overflow-wrap: break-word;
+        }
+      }
+    </style>
   </head>
   <body>
     <div id="root">
@@ -39,6 +69,6 @@
     </script>
     <script src="https://unpkg.com/lucide-react@0.468.0/dist/umd/lucide-react.js"></script>
     <script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
-    <script type="text/babel" src="./App.jsx?v=20260421-contact-polish"></script>
+    <script type="text/babel" src="./App.jsx?v=20260421-fresh-layout-2"></script>
   </body>
 </html>
