@@ -169,30 +169,37 @@ function ContactCard({ compact = false }) {
     <div
       className={[
         "rounded-[1.75rem] border border-cyan-100 bg-white shadow-2xl shadow-cyan-950/10",
-        compact ? "p-4" : "p-5 sm:p-6",
+        compact ? "p-4" : "p-4 sm:p-5",
       ].join(" ")}
     >
-      <div className="flex items-start gap-4">
-        <div className="shrink-0 rounded-2xl bg-slate-950 p-2 shadow-lg">
+      <div className="grid gap-5 md:grid-cols-[260px_1fr] md:items-center">
+        <div className="mx-auto w-full max-w-[260px] rounded-2xl bg-slate-950 p-3 shadow-lg shadow-slate-300">
           <img
             src={WECHAT_QR}
             alt="客服微信二维码"
-            className={compact ? "h-32 w-24 rounded-xl bg-white object-contain" : "h-64 w-48 rounded-xl bg-white object-contain sm:h-72 sm:w-56"}
+            className="w-full rounded-xl bg-white object-contain"
           />
         </div>
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0">
           <div className="inline-flex items-center gap-2 rounded-full bg-cyan-100 px-3 py-1 text-xs font-black text-cyan-800">
             <QrCode className="h-4 w-4" />
             扫码交付入口
           </div>
-          <h3 className={compact ? "mt-3 text-lg font-black text-slate-950" : "mt-4 text-2xl font-black text-slate-950"}>
-            复制订单后，扫码加客服微信
+          <h3 className="mt-4 text-2xl font-black leading-tight text-slate-950">
+            复制订单后扫码添加
           </h3>
-          <p className="mt-2 text-sm font-bold leading-6 text-slate-500">
-            微信昵称：<Strong>{WECHAT_NAME}</Strong>，地区：{WECHAT_LOCATION}。添加后把复制好的订单直接粘贴发送，客服会确认付款与交付步骤。
+          <p className="mt-3 text-sm font-bold leading-7 text-slate-500">
+            微信昵称：<Strong>{WECHAT_NAME}</Strong>，地区：{WECHAT_LOCATION}。添加后把订单粘贴发送，客服会确认付款方式和交付时间。
           </p>
-          <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-black leading-5 text-amber-900">
-            建议话术：先点底部“一键复制订单”，再扫码添加，聊天框里直接粘贴即可。
+          <div className="mt-5 grid gap-3">
+            {["点底部按钮复制订单", "扫码添加客服微信", "粘贴订单并确认付款"].map((item, index) => (
+              <div key={item} className="flex items-center gap-3 rounded-xl bg-slate-50 p-3 text-sm font-black text-slate-700">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-950 text-xs text-white">
+                  {index + 1}
+                </span>
+                {item}
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -632,14 +639,11 @@ function App() {
             </div>
             <h2 className="mt-5 text-3xl font-black">订单选好后，直接扫码加微信</h2>
             <p className="mt-4 max-w-2xl text-sm font-bold leading-7 text-cyan-50/80">
-              这个位置放在选购区之后，用户刚看完总价就能立刻添加客服。移动端也会先看到清晰指引，再看到二维码，不会挡住套餐选择。
+              复制订单会自动生成套餐、优惠和总价。扫码添加后直接粘贴发送，客服按订单内容确认付款和交付。
             </p>
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              {["1. 点底部复制订单", "2. 扫二维码加好友", "3. 粘贴订单确认付款"].map((item) => (
-                <div key={item} className="rounded-xl border border-white/10 bg-white/10 p-4 text-sm font-black text-white">
-                  {item}
-                </div>
-              ))}
+            <div className="mt-6 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-4">
+              <p className="text-sm font-black text-cyan-50">新手不用组织话术，只需要复制订单并发送。</p>
+              <p className="mt-2 text-xs font-bold leading-5 text-cyan-50/70">订单里会包含所选套餐、原价、优惠和最终总价。</p>
             </div>
           </div>
           <ContactCard />
