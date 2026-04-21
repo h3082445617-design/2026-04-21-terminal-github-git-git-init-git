@@ -39,16 +39,6 @@
   <body>
     <div id="root"></div>
     <script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
-    <script type="text/babel" data-type="module">
-      import React from "react";
-      import { createRoot } from "react-dom/client";
-      import App from "./App.jsx";
-
-      createRoot(document.getElementById("root")).render(
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>,
-      );
-    </script>
+    <script type="text/babel" data-type="module" src="./App.jsx"></script>
   </body>
 </html>

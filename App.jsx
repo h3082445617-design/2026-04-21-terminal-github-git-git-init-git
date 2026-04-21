@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
+import { createRoot } from "react-dom/client";
 import {
   ArrowRight,
   BadgeCheck,
@@ -128,7 +129,7 @@ function PresetCard({ description, icon: Icon, onClick, title }) {
   );
 }
 
-export default function App() {
+function App() {
   const [network, setNetwork] = useState(null);
   const [account, setAccount] = useState(null);
   const [aiService, setAiService] = useState(null);
@@ -471,3 +472,9 @@ export default function App() {
     </main>
   );
 }
+
+createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);
