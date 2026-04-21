@@ -159,7 +159,7 @@ function PresetCard({ description, icon: Icon, onClick, title }) {
         <Icon className="h-6 w-6" />
       </div>
       <h3 className="text-lg font-black text-slate-950">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-500">{description}</p>
+      <div className="mt-3 space-y-3 text-sm leading-6 text-slate-500">{description}</div>
     </button>
   );
 }
@@ -169,39 +169,34 @@ function ContactCard({ compact = false }) {
     <div
       className={[
         "rounded-[1.75rem] border border-cyan-100 bg-white shadow-2xl shadow-cyan-950/10",
-        compact ? "p-4" : "p-4 sm:p-5",
+        compact ? "p-4" : "p-5 sm:p-6",
       ].join(" ")}
     >
-      <div className="grid gap-5 md:grid-cols-[260px_1fr] md:items-center">
-        <div className="mx-auto w-full max-w-[260px] rounded-2xl bg-slate-950 p-3 shadow-lg shadow-slate-300">
-          <img
-            src={WECHAT_QR}
-            alt="客服微信二维码"
-            className="w-full rounded-xl bg-white object-contain"
-          />
+      <div className="mx-auto max-w-md text-center">
+        <div className="mx-auto inline-flex items-center gap-2 rounded-full bg-cyan-100 px-4 py-2 text-xs font-black text-cyan-800">
+          <QrCode className="h-4 w-4" />
+          扫码交付入口
         </div>
-        <div className="min-w-0">
-          <div className="inline-flex items-center gap-2 rounded-full bg-cyan-100 px-3 py-1 text-xs font-black text-cyan-800">
-            <QrCode className="h-4 w-4" />
-            扫码交付入口
-          </div>
-          <h3 className="mt-4 text-2xl font-black leading-tight text-slate-950">
-            复制订单后扫码添加
-          </h3>
-          <p className="mt-3 text-sm font-bold leading-7 text-slate-500">
-            微信昵称：<Strong>{WECHAT_NAME}</Strong>，地区：{WECHAT_LOCATION}。添加后把订单粘贴发送，客服会确认付款方式和交付时间。
-          </p>
-          <div className="mt-5 grid gap-3">
-            {["点底部按钮复制订单", "扫码添加客服微信", "粘贴订单并确认付款"].map((item, index) => (
-              <div key={item} className="flex items-center gap-3 rounded-xl bg-slate-50 p-3 text-sm font-black text-slate-700">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-950 text-xs text-white">
-                  {index + 1}
-                </span>
-                {item}
-              </div>
-            ))}
-          </div>
+        <div className="mx-auto mt-5 max-w-[300px] rounded-[1.5rem] bg-slate-950 p-3 shadow-xl shadow-slate-300">
+          <img src={WECHAT_QR} alt="客服微信二维码" className="w-full rounded-2xl bg-white object-contain" />
         </div>
+        <h3 className="mt-5 text-2xl font-black leading-tight text-slate-950">
+          复制订单后扫码添加
+        </h3>
+        <p className="mx-auto mt-3 max-w-sm text-sm font-bold leading-7 text-slate-500">
+          微信昵称：<Strong>{WECHAT_NAME}</Strong>，地区：{WECHAT_LOCATION}。添加后把订单粘贴发送，客服会确认付款方式和交付时间。
+        </p>
+      </div>
+
+      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        {["点底部复制订单", "扫码添加客服", "粘贴订单确认"].map((item, index) => (
+          <div key={item} className="rounded-2xl bg-slate-50 p-4 text-center">
+            <span className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-slate-950 text-sm font-black text-white">
+              {index + 1}
+            </span>
+            <p className="mt-3 text-sm font-black leading-5 text-slate-700">{item}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -428,25 +423,43 @@ function App() {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-8">
-        <SectionTitle eyebrow="Presets" title="极速通道：先选懒人包，再微调">
-          点一下自动带入套餐，下方仍然可以重复点击取消或改选。
+        <SectionTitle eyebrow="Presets" title="按学习/科研强度选套餐">
+          从日常体验、课程作业到论文冲刺，按自己的使用强度直接选；点一下自动带入，下方还能继续微调。
         </SectionTitle>
         <div className="grid gap-4 md:grid-cols-3">
           <PresetCard
-            title="尝鲜体验包"
-            description={<><Strong>新手无账号</Strong>：1个月网络 + Gmail + GPT Plus 1个月，适合先低成本体验。</>}
+            title="入门尝鲜包"
+            description={
+              <>
+                <p><Strong>适合人群：</Strong>刚接触 AI 的学生、课程作业较多但预算有限的新手。</p>
+                <p><Strong>能做什么：</Strong>用 GPT Plus 辅助改论文段落、润色邮件、整理课堂笔记、解释实验原理和代码报错。</p>
+                <p className="rounded-xl bg-cyan-50 p-3 font-black text-cyan-800">推荐场景：先跑通环境，低成本体验一个月。</p>
+              </>
+            }
             icon={Rocket}
             onClick={() => applyPreset({ network: "1_month", gmail: true, zeroCard: false, aiServices: ["gpt_plus_1m"] })}
           />
           <PresetCard
-            title="Gemini 进阶包"
-            description={<><Strong>已有账号首选</Strong>：半年网络 + 绑卡服务 + Gemini Pro 3个月，适合已有账号续会员。</>}
+            title="科研进阶包"
+            description={
+              <>
+                <p><Strong>适合人群：</Strong>已有 Google/Gemini 账号的学生、研究生、生环方向老师或课题组成员。</p>
+                <p><Strong>能做什么：</Strong>用 Gemini Pro 做长文献梳理、实验方案拆解、英文摘要润色、图表说明和组会汇报提纲。</p>
+                <p className="rounded-xl bg-indigo-50 p-3 font-black text-indigo-800">推荐场景：3个月稳定学习/科研使用，适合一整个阶段任务。</p>
+              </>
+            }
             icon={Network}
             onClick={() => applyPreset({ network: "6_months", gmail: false, zeroCard: true, aiServices: ["gemini_3m"] })}
           />
           <PresetCard
-            title="双引擎省心包"
-            description={<><Strong>不想折腾账号</Strong>：半年网络 + GPT Plus 1个月 + Gemini 1年成品号，命中组合立减 ￥10。</>}
+            title="论文冲刺省心包"
+            description={
+              <>
+                <p><Strong>适合人群：</Strong>马上要写结业论文、毕业论文、开题/结题汇报，或者不想折腾账号配置的人。</p>
+                <p><Strong>能做什么：</Strong>GPT 负责快速改写、润色和答辩问答；Gemini 年号负责长文献、实验背景、数据解读和长期科研资料整理。</p>
+                <p className="rounded-xl bg-amber-50 p-3 font-black text-amber-800">推荐场景：时间紧、任务重、想开箱即用；命中组合立减 ￥10。</p>
+              </>
+            }
             icon={Crown}
             onClick={() => applyPreset({ network: "6_months", gmail: false, zeroCard: false, aiServices: ["gpt_plus_1m", "gemini_1y"] })}
           />
@@ -631,7 +644,7 @@ function App() {
       </section>
 
       <section id="contact" className="mx-auto max-w-6xl px-5 py-10">
-        <div className="grid gap-5 lg:grid-cols-[1fr_420px] lg:items-center">
+        <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
           <div className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-2xl shadow-slate-950/20 sm:p-8">
             <div className="inline-flex items-center gap-2 rounded-full bg-cyan-400/15 px-4 py-2 text-sm font-black text-cyan-100">
               <MessageCircle className="h-4 w-4" />
