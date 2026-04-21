@@ -186,11 +186,15 @@ function App() {
   );
 
   const chooseFinishedAccount = () => {
-    setAiServices((current) =>
-      current.includes("gemini_1y")
-        ? current.filter((item) => item !== "gemini_1y")
-        : [...current.filter((item) => item !== "gemini_3m"), "gemini_1y"],
-    );
+    setAiServices((current) => {
+      if (current.includes("gemini_1y")) {
+        return current.filter((item) => item !== "gemini_1y");
+      }
+
+      setGmail(false);
+      setZeroCard(false);
+      return [...current.filter((item) => item !== "gemini_3m"), "gemini_1y"];
+    });
   };
 
   const toggleRechargeService = (service) => {
@@ -208,6 +212,7 @@ function App() {
   };
 
   const toggleGmail = () => {
+    if (hasFinishedAccount) return;
     setGmail((current) => {
       if (current) setZeroCard(false);
       return !current;
@@ -215,6 +220,7 @@ function App() {
   };
 
   const toggleZeroCard = () => {
+    if (hasFinishedAccount) return;
     setZeroCard((current) => !current);
   };
 
@@ -435,11 +441,11 @@ function App() {
                 Gmail 与绑卡能力
               </div>
               <div className="grid gap-4 lg:grid-cols-2">
-                <OptionCard active={gmail} icon={Mail} onClick={toggleGmail} price={PRICES.account.gmail} title="纯净原生 Gmail">
-                  ￥20。干净的 Google 身份基底，可单独买，也可配合 GPT 或 Gemini 充值使用。
+                <OptionCard disabled={hasFinishedAccount} active={gmail} icon={Mail} onClick={toggleGmail} price={PRICES.account.gmail} title="纯净原生 Gmail">
+                  ￥20。干净的 Google 身份基底，可单独买，也可配合 GPT 或 Gemini 充值使用。选择 Gemini 1年成品号后无需再选。
                 </OptionCard>
-                <OptionCard active={zeroCard} icon={CreditCard} onClick={toggleZeroCard} price={PRICES.account.zero_card} title="零美元卡绑定服务">
-                  ￥20。绑卡是独立增值服务，可以单独选择，也可以和会员服务一起买。
+                <OptionCard disabled={hasFinishedAccount} active={zeroCard} icon={CreditCard} onClick={toggleZeroCard} price={PRICES.account.zero_card} title="零美元卡绑定服务">
+                  ￥20。绑卡是独立增值服务，可以单独选择，也可以和会员服务一起买。选择 Gemini 1年成品号后无需再选。
                 </OptionCard>
               </div>
             </div>
