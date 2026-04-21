@@ -275,7 +275,7 @@ function App() {
                   icon={Rocket}
                   onClick={() => setNetwork("1_month")}
                   price={PRICES.network["1_month"]}
-                  title="\u5c1d\u9c9c\u5355\u6708"
+                  title={"\u5c1d\u9c9c\u5355\u6708"}
                 >
                   {"\u5148\u4f53\u9a8c\u5b8c\u6574\u73af\u5883\uff0c\u9002\u5408\u7b2c\u4e00\u6b21\u5c1d\u8bd5 AI \u5957\u9910\u7684\u65b0\u624b\u3002"}
                 </OptionCard>
@@ -285,7 +285,7 @@ function App() {
                   icon={ShieldCheck}
                   onClick={() => setNetwork("6_months")}
                   price={PRICES.network["6_months"]}
-                  title="\u534a\u5e74\u7a33\u5b9a\u7248"
+                  title={"\u534a\u5e74\u7a33\u5b9a\u7248"}
                 >
                   {"\u957f\u671f\u4f7f\u7528\u66f4\u5b89\u5fc3\uff0c\u7ed1\u5b9a\u672c\u7ad9\u4e13\u5c5e\u7f51\u7edc\u540e\u4eab\u53d7\u66f4\u5b8c\u6574\u552e\u540e\u4fdd\u969c\u3002"}
                 </OptionCard>
@@ -303,7 +303,7 @@ function App() {
                   icon={Mail}
                   onClick={() => setAccount("gmail")}
                   price={PRICES.account.gmail}
-                  title="\u7eaf\u51c0\u539f\u751f Gmail"
+                  title={"\u7eaf\u51c0\u539f\u751f Gmail"}
                 >
                   {"\u65b0\u624b\u6700\u5bb9\u6613\u7406\u89e3\u7684\u5165\u95e8\u8eab\u4efd\uff0c\u9002\u5408\u7ed1\u5b9a\u5e38\u7528 AI \u670d\u52a1\u3002"}
                 </OptionCard>
@@ -312,7 +312,7 @@ function App() {
                   icon={CreditCard}
                   onClick={() => setAccount("zero_card")}
                   price={PRICES.account.zero_card}
-                  title="\u96f6\u7f8e\u5143\u5361\u7ed1\u5b9a\u670d\u52a1"
+                  title={"\u96f6\u7f8e\u5143\u5361\u7ed1\u5b9a\u670d\u52a1"}
                 >
                   {"\u5e2e\u4f60\u5904\u7406\u6d77\u5916\u670d\u52a1\u5e38\u89c1\u7ed1\u5361\u95e8\u69db\uff0c\u51cf\u5c11\u6ce8\u518c\u548c\u8ba2\u9605\u963b\u529b\u3002"}
                 </OptionCard>
@@ -330,7 +330,7 @@ function App() {
               icon={Bot}
               onClick={() => setAiService("gpt_plus_1m")}
               price={PRICES.ai_service.gpt_plus_1m}
-              title="ChatGPT Plus \u7eaf\u51c0\u4ee3\u5145"
+              title={"ChatGPT Plus \u7eaf\u51c0\u4ee3\u5145"}
             >
               {"1 \u4e2a\u6708\u9ad8\u9891\u529e\u516c\u3001\u5199\u4f5c\u3001\u5b66\u4e60\u4e0e\u81ea\u52a8\u5316\u8f85\u52a9\u5165\u53e3\u3002"}
             </OptionCard>
@@ -339,7 +339,7 @@ function App() {
               icon={Gem}
               onClick={() => setAiService("gemini_3m")}
               price={PRICES.ai_service.gemini_3m}
-              title="Gemini Pro \u9ad8\u7ea7\u7248"
+              title={"Gemini Pro \u9ad8\u7ea7\u7248"}
             >
               {"3 \u4e2a\u6708\u8fdb\u9636\u4f53\u9a8c\uff0c\u9002\u5408\u6587\u6863\u3001\u641c\u7d22\u3001\u5185\u5bb9\u521b\u4f5c\u591a\u573a\u666f\u4f7f\u7528\u3002"}
             </OptionCard>
@@ -351,7 +351,7 @@ function App() {
               icon={Crown}
               onClick={() => setAiService("gemini_1y")}
               price={PRICES.ai_service.gemini_1y}
-              title="Gemini Pro 1\u5e74\u7eaf\u624b\u5de5\u6210\u54c1\u53f7"
+              title={"Gemini Pro 1\u5e74\u7eaf\u624b\u5de5\u6210\u54c1\u53f7"}
             >
               {"\u6ee1\u8840\u957f\u671f\u65b9\u6848\uff0c\u4e0d\u6298\u817e\u6ce8\u518c\u6d41\u7a0b\uff0c\u62ff\u5230\u5c31\u80fd\u76f4\u63a5\u5f00\u59cb\u7528\u3002"}
             </OptionCard>
@@ -386,19 +386,19 @@ function App() {
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           <PresetCard
-            title="\u5c1d\u9c9c\u4f53\u9a8c\u5305"
+            title={"\u5c1d\u9c9c\u4f53\u9a8c\u5305"}
             description={"1\u4e2a\u6708\u7f51\u7edc + Gmail + GPT Plus 1\u4e2a\u6708\uff0c\u9002\u5408\u4f4e\u6210\u672c\u5148\u8dd1\u901a\u5b8c\u6574\u4f53\u9a8c\u3002"}
             icon={Rocket}
             onClick={() => applyPreset({ network: "1_month", account: "gmail", aiService: "gpt_plus_1m" })}
           />
           <PresetCard
-            title="\u957f\u6548\u8fdb\u9636\u5305"
+            title={"\u957f\u6548\u8fdb\u9636\u5305"}
             description={"\u534a\u5e74\u7f51\u7edc + \u96f6\u7f8e\u5143\u5361 + Gemini 3\u4e2a\u6708\uff0c\u9002\u5408\u7a33\u5b9a\u8fdb\u9636\u4f7f\u7528\u3002"}
             icon={BadgeCheck}
             onClick={() => applyPreset({ network: "6_months", account: "zero_card", aiService: "gemini_3m" })}
           />
           <PresetCard
-            title="\u6ee1\u8840\u5168\u81ea\u52a8\u5305"
+            title={"\u6ee1\u8840\u5168\u81ea\u52a8\u5305"}
             description={"\u534a\u5e74\u7f51\u7edc + Gemini 1\u5e74\u6210\u54c1\u53f7\uff0c\u9002\u5408\u5b8c\u5168\u4e0d\u60f3\u6298\u817e\u7684\u6ee1\u8840\u65b9\u6848\u3002"}
             icon={Crown}
             onClick={() => applyPreset({ network: "6_months", account: null, aiService: "gemini_1y" })}
